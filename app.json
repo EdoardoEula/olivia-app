@@ -33,6 +33,24 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-font",
+        {
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "DM Sans",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/DMSans_18pt-Regular",
+                    "weight": 800
+                  }
+                ]
+              }
+            ]
+          }
+        }
       ]
     ],
     "experiments": {
