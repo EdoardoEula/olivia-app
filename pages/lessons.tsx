@@ -65,7 +65,6 @@ const LessonTile: React.FC<LessonTileProps> = ({ item, theme }) => {
 
 // --- MAIN PAGE COMPONENT (Correctly handles hooks and passes props) ---
 const LessonsPage: React.FC = () => {
-  // ✅ Hooks are now called correctly inside the component
   const scheme = useColorScheme();
   const theme = scheme === 'dark' ? colors.dark : colors.light;
   const styles = getThemedStyles(theme);

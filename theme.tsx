@@ -19,7 +19,7 @@ export const colors = {
   light: {
     // Sfondi
     background: palette.offWhite,      // Sfondo principale, molto chiaro e pulito
-    card: '#FFFFFF',                   // Usiamo il bianco puro per le card per un contrasto maggiore, come nell'app iOS
+    card: '#F2F7F7',                   // Usiamo il bianco puro per le card per un contrasto maggiore, come nell'app iOS
     
     // Testi
     text: palette.darkGrey,            // Testo principale, per la massima leggibilità
@@ -30,7 +30,8 @@ export const colors = {
     accent: palette.dustyRose,         // Un colore di accento secondario
     
     // Altri
-    border: '#EAEAEA',                 // Un bordo molto leggero per separare le card
+    border: '#EAEAEA',
+    bubblebg: palette.lightBeige,                 // Un bordo molto leggero per separare le card
     disabled: palette.dustyRose,       // Colore per gli elementi disattivati
     white: '#FFFFFF',                  // Colore esplicito per testi su sfondi colorati
   },
@@ -39,7 +40,7 @@ export const colors = {
   dark: {
     // Sfondi
     background: palette.darkGrey,      // Lo sfondo principale diventa il colore più scuro
-    card: '#404040',                   // Un grigio leggermente più chiaro per far "emergere" le card
+    card: '#333333',                   // Un grigio leggermente più chiaro per far "emergere" le card
     
     // Testi
     text: palette.offWhite,            // Testo principale chiaro per contrastare con lo sfondo scuro
@@ -50,7 +51,8 @@ export const colors = {
     accent: palette.mutedTeal,         // Il verde acqua diventa un ottimo accento secondario
     
     // Altri
-    border: '#555555',                 // Un bordo visibile per separare le card sullo sfondo scuro
+    border: '#555555',
+    bubblebg: palette.darkGrey,         
     disabled: '#505050',               // Colore scuro e desaturato per gli elementi disattivati
     white: '#FFFFFF',                  // Colore esplicito per testi su sfondi colorati
   },

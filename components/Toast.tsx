@@ -1,5 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, Platform, StyleSheet, Text } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import React, { useEffect } from 'react';
+import { Platform, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 interface ToastProps {
   message: string;
@@ -7,47 +13,45 @@ interface ToastProps {
 }
 
 const Toast: React.FC<ToastProps> = ({ message, onHide }) => {
-  const opacity = useRef(new Animated.Value(0)).current;
+  // Use a shared value for the entrance animation
+  const opacity = useSharedValue(0);
 
+  // Define the animated style for the fade-in effect
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
+
+  // Trigger the entrance animation when the component mounts
   useEffect(() => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 300,
-      easing: Easing.inOut(Easing.ease),
-      useNativeDriver: true,
-    }).start(() => {
-      setTimeout(() => {
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 300,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }).start(onHide);
-      }, 2000);
-    });
-  }, [message, onHide, opacity]);
+    opacity.value = withTiming(1, { duration: 300 });
+  }, [opacity]);
 
   return (
-    <Animated.View style={[styles.toastContainer, { opacity }]}>
+    <Animated.View style={[styles.toastContainer, animatedStyle]}>
       <Text style={styles.toastText}>{message}</Text>
+      
+      {/* "X" button to close the toast */}
+      <TouchableOpacity style={styles.closeButton} onPress={onHide}>
+        <Feather name="x" size={20} color="#E0E0E0" />
+      </TouchableOpacity>
     </Animated.View>
   );
-}
+};
 
 export default Toast;
 
 const styles = StyleSheet.create({
   toastContainer: {
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 120 : 100, // Adjust position based on OS to avoid overlap with input
+    bottom: Platform.OS === 'ios' ? 120 : 100,
     left: 20,
     right: 20,
-    backgroundColor: '#333333', // Darker, more modern background
-    borderRadius: 20, // Slightly less rounded
+    backgroundColor: '#333333',
+    borderRadius: 20,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
     alignSelf: 'center',
     zIndex: 1000,
     shadowColor: '#000',
@@ -55,11 +59,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 6,
+    // Flexbox properties to align text and button
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   toastText: {
-    color: '#E0E0E0', // Light text for dark background
+    color: '#E0E0E0',
     fontSize: 16,
     fontWeight: '500',
-    textAlign: 'center',
+    textAlign: 'left',
+    // Ensure text doesn't push the button off-screen
+    flex: 1, 
+    marginRight: 10,
+  },
+  closeButton: {
+    // Provides a larger, easier-to-press area
+    padding: 5, 
   },
 });

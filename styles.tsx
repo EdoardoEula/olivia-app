@@ -25,6 +25,11 @@ export const getThemedStyles = (theme: typeof colors.light) => {
     contentContainer: {
       padding: 20,
     },
+    loadingText: {
+      marginTop: 10,
+      fontSize: 16,
+      color: theme.text, // or some color from your theme
+    },
 
     // Header
     header: {
@@ -188,7 +193,7 @@ export const getThemedStyles = (theme: typeof colors.light) => {
       marginLeft: 8,
       fontWeight: '500',
     },
-    
+
     // Pulsanti e Azioni
     footer: {
       flexDirection: 'row',
@@ -218,7 +223,6 @@ export const getThemedStyles = (theme: typeof colors.light) => {
       // Il colore dell'icona all'interno viene impostato nel componente (es. theme.primary)
     },
     closeButton: {
-      marginLeft: 10,
       padding: 5,
     },
 
@@ -266,7 +270,7 @@ export const getThemedStyles = (theme: typeof colors.light) => {
     },
     sendButton: {
       marginLeft: 8,
-      backgroundColor: theme.accent, // Usiamo l'accent color dalla palette
+      backgroundColor: theme.primary, // Usiamo l'accent color dalla palette
       borderRadius: 20,
       width: 40,
       height: 40,
@@ -279,24 +283,25 @@ export const getThemedStyles = (theme: typeof colors.light) => {
       elevation: 1,
     },
     bubbleContainer: {
-      backgroundColor: theme.card,
       borderRadius: 15,
-      padding: 15,
+      paddingTop: 5,
+      paddingBottom: 5,
+      paddingLeft: 10,
+      paddingRight: 10,
       marginHorizontal: 15,
       marginBottom: 10,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       borderWidth: 1,
-      borderColor: theme.border,
-      elevation: 3,
+      borderColor: theme.border
     },
     bubbleText: {
       flex: 1,
       fontSize: 15,
       color: theme.text,
     },
-    
+
     // Testo Domanda
     questionRow: {
       paddingVertical: 12,
@@ -306,5 +311,24 @@ export const getThemedStyles = (theme: typeof colors.light) => {
       color: theme.text,
       lineHeight: 22,
     },
+    userBubble: {
+      backgroundColor: theme.bubblebg,
+      alignSelf: 'flex-end',
+      borderBottomRightRadius: 4,
+    },
+    botBubble: {
+      alignSelf: 'flex-start',
+      backgroundColor: 'transparent',
+      marginHorizontal: 15,
+      marginBottom: 10,
+    },
+    userBubbleText: {
+      color: theme.text,
+      fontSize: 16,
+    },
+    botBubbleText: {
+      color: theme.text,
+      fontSize: 16,
+    }
   });
 };
