@@ -1,13 +1,14 @@
 import ChatBubble from '@/components/ChatBubble';
 import { getThemedStyles } from '@/styles';
 import { colors } from '@/theme';
-import React, { useEffect, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react'; // Import forwardRef
 import {
   Animated,
   Image,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native';
@@ -18,34 +19,38 @@ interface Message {
   content: string;
 }
 
+// Define the list of example prompts
+const examplePrompts = [
+  'Pianifica una lezione',
+  'Annulla una lezione',
+  'Nuovo cliente',
+  'Pianifica una nuova lezione ricorrente',
+];
+
+// Props no longer need the 'ref' property, as it's handled by forwardRef.
 interface HomePageProps {
-  messages: Message[]; // The component now expects an array of messages
+  messages: Message[];
+  onPromptPress: (promptText: string) => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ messages }) => {
+// Use forwardRef to pass the ref from the parent (AppContainer) to the ScrollView
+const HomePage = forwardRef<ScrollView, HomePageProps>(({ messages, onPromptPress }, ref) => {
   const scheme = useColorScheme();
   const theme = scheme === 'dark' ? colors.dark : colors.light;
-  const styles = getThemedStyles(theme); // Assuming this provides themed styles
+  const styles = getThemedStyles(theme);
 
-  const scrollViewRef = useRef<ScrollView>(null);
-
-  // Determine which logo to use based on the color scheme
   const logoSource =
     scheme === 'dark'
       ? require('@/assets/images/solo_logo_white.png')
       : require('@/assets/images/solo_logo_black.png');
 
-  // Check if there are any messages to display
   const hasMessages = messages && messages.length > 0;
 
-  // Set up animated values for opacity.
-  // Show logo if no messages, otherwise show messages.
   const logoOpacity = useRef(new Animated.Value(hasMessages ? 0 : 1)).current;
   const messagesOpacity = useRef(new Animated.Value(hasMessages ? 1 : 0)).current;
 
-  // Effect to handle animations when the message list changes
+  // Handles the fade animation.
   useEffect(() => {
-    // Animate opacity based on whether messages exist
     Animated.parallel([
       Animated.timing(logoOpacity, {
         toValue: hasMessages ? 0 : 1,
@@ -59,53 +64,68 @@ const HomePage: React.FC<HomePageProps> = ({ messages }) => {
         useNativeDriver: true,
       }),
     ]).start();
+  }, [hasMessages]);
 
-    // If messages are present, scroll to the end of the list
-    if (hasMessages) {
-      setTimeout(() => scrollViewRef.current?.scrollToEnd({ animated: true }), 300);
+  // Handles scrolling to the end using the forwarded ref from the parent.
+  useEffect(() => {
+    // Check if the ref is valid and has a 'current' property before using it.
+    if (hasMessages && ref && 'current' in ref && ref.current) {
+      // The timeout gives the UI a moment to render the new message before scrolling.
+      setTimeout(() => {
+        ref.current?.scrollToEnd({ animated: true });
+      }, 100);
     }
-  }, [hasMessages, logoOpacity, messagesOpacity]);
+  }, [messages, hasMessages, ref]); // Dependency includes the ref to be safe.
 
   return (
     <View style={localStyles.container}>
-      {/* Welcome screen with logo, visible only when there are no messages */}
+      {/* Welcome screen with logo and prompts */}
       <Animated.View
         style={[
           StyleSheet.absoluteFill,
           localStyles.logoContainer,
           { opacity: logoOpacity },
         ]}
-        pointerEvents={hasMessages ? 'none' : 'auto'} // Disable interaction when hidden
+        pointerEvents={hasMessages ? 'none' : 'auto'}
       >
         <Image source={logoSource} style={localStyles.logo} resizeMode="contain" />
         <Text style={[localStyles.welcomeText, { color: theme.text }]}>
           Ciao! Come posso aiutarti?
         </Text>
+        <View style={localStyles.promptsContainer}>
+          {examplePrompts.map((prompt, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[styles.promptBubble, { backgroundColor: theme.secondary }]}
+              onPress={() => onPromptPress(prompt)}
+            >
+              <Text style={[localStyles.promptText, { color: theme.text }]}>{prompt}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </Animated.View>
 
       {/* View for displaying the list of messages */}
-      {hasMessages && (
-        <Animated.View style={[StyleSheet.absoluteFill, { opacity: messagesOpacity }]}>
-          <ScrollView
-            ref={scrollViewRef}
-            contentContainerStyle={localStyles.scrollContainer}
-            showsVerticalScrollIndicator={false}>
-            {/* Map through messages and render each one using the ChatBubble component */}
-            {messages.map((message, index) => (
-              <ChatBubble
-                key={index}
-                message={message.content}
-                role={message.role}
-              />
-            ))}
-          </ScrollView>
-        </Animated.View>
-      )}
+      <Animated.View style={[StyleSheet.absoluteFill, { opacity: messagesOpacity, zIndex: hasMessages ? 1 : -1 }]}>
+        <ScrollView
+          ref={ref} // Attach the forwarded ref directly to the ScrollView
+          contentContainerStyle={localStyles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {messages.map((message, index) => (
+            <ChatBubble
+              key={index}
+              message={message.content}
+              role={message.role}
+            />
+          ))}
+        </ScrollView>
+      </Animated.View>
     </View>
   );
-};
+});
 
-// Local styles for the component
+// Local styles for the component (unchanged)
 const localStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -116,37 +136,34 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    zIndex: 0,
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
   },
   welcomeText: {
     marginTop: 20,
-    fontSize: 18,
+    marginBottom: 25,
+    fontSize: 20,
     textAlign: 'center',
     paddingHorizontal: 20,
+  },
+  promptsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+
+  promptText: {
+    fontSize: 14,
+    textAlign: 'center',
   },
   scrollContainer: {
     paddingHorizontal: 15,
     paddingVertical: 20,
-  },
-  messageBubble: {
-    borderRadius: 20,
-    padding: 15,
-    marginBottom: 10,
-    maxWidth: '85%',
-  },
-  userMessage: {
-    alignSelf: 'flex-end',
-    borderBottomRightRadius: 5,
-  },
-  agentMessage: {
-    alignSelf: 'flex-start',
-    borderBottomLeftRadius: 5,
-  },
-  messageText: {
-    fontSize: 16,
+    paddingBottom: 50,
   },
 });
 

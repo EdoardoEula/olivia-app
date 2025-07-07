@@ -329,6 +329,157 @@ export const getThemedStyles = (theme: typeof colors.light) => {
     botBubbleText: {
       color: theme.text,
       fontSize: 16,
-    }
+    },
+    splitViewContainer: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    chatContainerSplit: {
+      flex: 1,
+      borderRightWidth: 1,
+      borderColor: theme.border,
+    },
+    pageContainerSplit: {
+      flex: 1,
+    },
+    chatContainer: {
+      flex: 1,
+    },
+    promptBubble: {
+      paddingVertical: 12,
+      paddingHorizontal: 18,
+      borderRadius: 25,
+      margin: 6,
+      borderWidth: 1,
+      borderColor: theme.primary,
+    },
+    centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
+    instructorName: {
+      fontSize: 16,
+      // color: theme.textSecondary,
+    },
+    dateTimeText: {
+      fontSize: 14,
+      // color: theme.textSecondary,
+    },
+    cardFooter: {
+      marginTop: 8,
+    },
+    statusRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 4,
+    },
+    statusIcon: {
+      marginRight: 8,
+    },
+    statusText: {
+      fontSize: 16,
+      fontWeight: '500',
+      // color: theme.text,
+    },
+    emptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 100,
+    },
+    emptyText: {
+      marginTop: 16,
+      fontSize: 16,
+      color: theme.textSecondary,
+    },
+    headerContainer: {
+      paddingVertical: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.border,
+      marginBottom: 8,
+    },
+    toggleButton: {
+      padding: 8,
+    },
+    calendarContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
+    },
+    calendarPlaceholderText: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: theme.textSecondary,
+      marginTop: 16,
+      textAlign: 'center',
+    },
+    calendarSubText: {
+      fontSize: 14,
+      color: theme.textSecondary,
+      marginTop: 8,
+    },
+    agendaContainer: {
+      flex: 1,
+      marginTop: 16,
+      paddingHorizontal: 20,
+    },
+    agendaTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: theme.text,
+      marginBottom: 12,
+    },
+    agendaEmptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
+    },
+    footerContainer: {
+      // This container holds the input and the new nav bar
+      borderTopWidth: 1,
+      borderColor: theme.border,
+      backgroundColor: theme.background,
+    },
+    navBarContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingVertical: 8,
+      backgroundColor: theme.background, // Or theme.background
+    },
+    navButton: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 4,
+    },
+    navButtonText: {
+      fontSize: 12,
+      marginTop: 4,
+      fontWeight: '500',
+    },
+    eventCard: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: theme.background, // A slightly different background
+      padding: 16,
+    },
+    eventText: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: theme.primary,
+      marginLeft: 12,
+    },
+    sectionStyle: {
+      // This ensures the background of the section header matches the page
+      backgroundColor: theme.background,
+      paddingHorizontal: 20, // Align with list content padding
+    },
+    agendaSectionHeader: {
+      // This styles the date text (e.g., "2025-07-07")
+      paddingVertical: 12,
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: theme.text,
+      backgroundColor: theme.background, // Match the page background
+    },
   });
 };

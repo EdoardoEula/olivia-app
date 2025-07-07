@@ -17,11 +17,9 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message, role, onDismiss, isDis
   const theme = scheme === 'dark' ? colors.dark : colors.light;
   const styles = getThemedStyles(theme);
 
-  // Animation refs
   const scaleAnim = useRef(new Animated.Value(0.5)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
-  // Entrance animation
   useEffect(() => {
     Animated.parallel([
       Animated.timing(scaleAnim, {
@@ -38,32 +36,22 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message, role, onDismiss, isDis
     ]).start();
   }, []);
 
-
   const bubbleStyle = role === 'user' ? styles.userBubble : styles.botBubble;
+  const textStyle = role === 'user' ? styles.userBubbleText : styles.botBubbleText;
 
-  // Build the style array conditionally
+  // CORRECTED: The `textStyle` is removed from this array.
+  // Style properties for text (like `color` or `fontSize`) do not work on a <View>.
   const containerStyles = [
-    // The main bubble container style is applied ONLY to the user
     role === 'user' && styles.bubbleContainer,
-
-    // Apply the role-specific style (userBubble or botBubble)
     bubbleStyle,
-
-    // If dismissible, override to ensure no background or border
     isDismissible && { backgroundColor: 'transparent', borderWidth: 0 },
-
-    // Apply animations
     { transform: [{ scale: scaleAnim }], opacity: opacityAnim },
   ];
 
-
   return (
-    // Use the conditionally built style array.
-    // .filter(Boolean) removes any 'false' values from the array.
     <Animated.View style={containerStyles.filter(Boolean)}>
-      {/* Wrap the markdown to add spacing and prevent it from going under the button */}
       <View style={{ marginRight: isDismissible ? 25 : 0 }}>
-        <MarkdownDisplay>
+        <MarkdownDisplay style={{ body: textStyle }}>
           {message}
         </MarkdownDisplay>
       </View>
